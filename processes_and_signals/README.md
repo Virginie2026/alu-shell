@@ -1,1 +1,1 @@
-Processes and signals project README
+Project repository for learning about Linux processes and signals.
