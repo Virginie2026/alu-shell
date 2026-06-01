@@ -1,0 +1,29 @@
+#!/bin/bash
+# 1. Define custom base character sets
+base_water="water"
+base_stir="stir."
+base_bestchol="bestchol"
+
+# 2. Get base lengths
+len_water=${#base_water}
+len_stir=${#base_stir}
+len_bestchol=${#base_bestchol}
+
+# 3. Create standard math digits (01234...) matching the length of each base
+digits_water=$(printf '%s' {0..9} {A..Z} | head -c "$len_water")
+digits_stir=$(printf '%s' {0..9} {A..Z} | head -c "$len_stir")
+digits_bestchol=$(printf '%s' {0..9} {A..Z} | head -c "$len_bestchol")
+
+# 4. Translate the custom symbols to standard digits
+val_water=$(echo "$WATER" | tr "$base_water" "$digits_water")
+val_stir=$(echo "$STIR" | tr "$base_stir" "$digits_stir")
+
+# 5. Convert each to Base 10 separately to avoid mixing up bc's state
+dec_water=$(echo "ibase=$len_water; $val_water" | bc)
+dec_stir=$(echo "ibase=$len_stir; $val_stir" | bc)
+
+# 6. Add them up in Base 10 and convert the final result to the target base size
+bc_result=$(echo "obase=$len_bestchol; $dec_water + $dec_stir" | bc)
+
+# 7. Clean up backslashes/newlines from bc, and translate back to bestchol symbols
+echo "$bc_result" | tr -d '\\\n ' | tr "$digits_bestchol" "$base_bestchol"
