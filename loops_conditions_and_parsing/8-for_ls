@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # This script lists directory contents displaying only the part after the first dash
 
+shopt -s nullglob
+
 for file in *
 do
     if [ -f "$file" ]
-    ;; alors on traite uniquement si c'est un fichier (évite les bugs si le dossier est vide)
     then
         echo "$file" | cut -d '-' -f 2-
     fi
