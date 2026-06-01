@@ -1,2 +1,5 @@
 #!/bin/bash
-echo "obase=8; ibase=5; $(echo "$WATER" | tr 'water' '01234') + ibase=4; $(echo "$STIR" | tr -cd 'stir' | tr 'stir' '0123')" | bc | tr '01234567' 'bestchol'
+clean_water=$(echo "$WATER" | tr -d '[:space:]' | tr 'water' '01234')
+clean_stir=$(echo "$STIR" | tr -d '[:space:]' | tr -cd 'stir' | tr 'stir' '0123')
+echo "obase=8; ibase=5; $clean_water + ibase=4; $clean_stir" | bc | tr -d '\n' | tr '01234567' 'bestchol'
+echo ""
